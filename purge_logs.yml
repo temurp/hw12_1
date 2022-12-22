@@ -1,0 +1,22 @@
+- name: Purge logs playbook
+  hosts: all
+  become: yes
+  
+  vars:
+    age: 2
+    # Files older than N days should be deleted
+    path: /var/log/myapp # Path to log files
+    
+  tasks:
+    - name: Find files that are older than N days
+      find:
+        paths: "{{ path }}"
+        age: "{{ age }}"
+        recurse: yes
+      register: oldLogFiles
+      
+    - name: Remove old log files
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ oldLogFiles.files }}"
