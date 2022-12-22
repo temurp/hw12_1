@@ -1,6 +1,7 @@
 - name: Purge logs playbook
   hosts: all
   become: yes
+  gather_facts: no
   
   vars:
     age: 2
@@ -11,10 +12,10 @@
     - name: Find files that are older than N days
       find:
         paths: "{{ path }}"
-        age: "{{ age }}"
+        age: "{{ age }}d" 
         recurse: yes
       register: oldLogFiles
-      
+
     - name: Remove old log files
       file:
         path: "{{ item.path }}"
