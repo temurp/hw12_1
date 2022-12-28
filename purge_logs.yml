@@ -4,8 +4,7 @@
   gather_facts: no
   
   vars:
-    age: 2
-    # Files older than N days should be deleted
+    age: 2 # Files older than N days should be deleted
     path: /var/log/myapp # Path to log files
     
   tasks:

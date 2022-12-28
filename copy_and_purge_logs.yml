@@ -18,14 +18,11 @@
       register: oldLogFiles
 
     - name: copy logs to master server
-      #run_once: yes
       fetch:
         src: "{{ item.path }}"
         dest: "{{ local_log_storage }}/{{ inventory_hostname }}/"
         flat: yes
-        #dest: /tmp/log_storage/{{ inventory_hostname }}
       with_items: "{{ oldLogFiles.files }}"
-      #when: inventory_hostname == 'master1_linux'
 
     - name: Remove old log files
       file:
