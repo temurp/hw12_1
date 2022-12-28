@@ -35,4 +35,5 @@ N дней по заданному пути на удаленном сервер
 Как запускать плейбуки:
 
 ansible-playbook -i hosts.ini purge_logs.yml
+
 ansible-playbook -i hosts.ini copy_and_purge_logs.yml
