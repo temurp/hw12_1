@@ -21,7 +21,7 @@
       #run_once: yes
       fetch:
         src: "{{ item.path }}"
-        dest: "{{ local_log_storage }}"
+        dest: "{{ local_log_storage }}/{{ inventory_hostname }}/"
         flat: yes
         #dest: /tmp/log_storage/{{ inventory_hostname }}
       with_items: "{{ oldLogFiles.files }}"
