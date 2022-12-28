@@ -1,0 +1,34 @@
+- name: Copy and then purge logs
+  hosts: all
+  become: yes
+  gather_facts: no
+
+  vars:
+    age: 2 # Files older than N days should be deleted
+    path_to_logs: /var/log/myapp # Path to log files
+    local_log_storage: /tmp/log_storage/ # Path to local log storage
+
+  tasks:
+    - name: Find files that are older than N days
+      find:
+        paths: "{{ path_to_logs }}"
+        age: "{{ age }}d"
+        recurse: yes
+        #patterns: "*.log" #Uncomment this if file mask is important
+      register: oldLogFiles
+
+    - name: copy logs to master server
+      #run_once: yes
+      fetch:
+        src: "{{ item.path }}"
+        dest: "{{ local_log_storage }}"
+        flat: yes
+        #dest: /tmp/log_storage/{{ inventory_hostname }}
+      with_items: "{{ oldLogFiles.files }}"
+      #when: inventory_hostname == 'master1_linux'
+
+    - name: Remove old log files
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ oldLogFiles.files }}"
